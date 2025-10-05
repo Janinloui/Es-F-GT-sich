@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 12" preserveAspectRatio="none">
+  <!-- Irregular “rubble” line across the width -->
+  <path d="M0 11
+           C  6 10, 10  7, 16  8
+           C 22  9, 26  3, 32  4
+           C 38  5, 42 10, 48  9
+           C 54  8, 58  2, 64  3
+           C 70  4, 74  8, 80  7
+           C 86  6, 92 10,100  9"
+        fill="none" stroke="#000" stroke-width="0.6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

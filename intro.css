@@ -156,3 +156,72 @@
   transform:translateY(0);
   opacity:1;
 }
+
+:root { --nav-h: 56px; }
+
+/* Fixed header */
+.intro-nav{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .6rem clamp(12px,4vw,48px);
+  background: #ffffff00;              /* solid white bar */
+  border-bottom: 1px solid #000;  /* thin divider */
+  z-index: 1000;                  /* above everything */
+}
+
+/* Push the page down so content isn't hidden behind the fixed bar */
+.intro { padding-top: var(--nav-h); }
+
+/* Header links in black */
+.intro-nav .brand,
+.intro-nav .back{
+  color: #000;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+.intro-nav .back{ font-weight: 400; opacity: .9; }
+.intro-nav .back:hover{ opacity: 1; }
+
+
+/* Rubble edge for the scrolling bars */
+:root{
+  --stripe-edge-band: 16px;   /* how far the rubble protrudes outside the bar */
+}
+
+/* make sure the bar can draw outside its box */
+.stripe{
+  position: relative;
+  overflow: visible;
+}
+
+/* top rubble edge 
+.stripe::before,
+.stripe::after{
+  content:"";
+  position:absolute;
+  left:0; right:0;
+  height: var(--stripe-edge-band);
+  pointer-events:none;
+  background-image: url("assets/rubble-edge-h.svg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  z-index: 2;                
+}
+
+
+.stripe::before{
+  top: calc(-1 * var(--stripe-edge-band) - 0.5px); 
+}
+
+.stripe::after{
+  bottom: calc(-1 * var(--stripe-edge-band) - 0.5px);
+  transform: scaleY(-1);      
+  transform-origin: center;
+}
+
+
+.stripe-inner{ position: relative; z-index: 3; } 
+*/
