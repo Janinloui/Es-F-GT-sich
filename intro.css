@@ -1,104 +1,158 @@
-/* intro.css — clean Danish layout: thin rules, generous whitespace */
-.intro {
-  background:#fff; color:#000;
+/* ========================
+   Base
+======================== */
+:root{
+  --nav-h: 56px;
+  --pad: clamp(16px,4vw,56px);
+}
+
+.intro{
+  background:#fff;
+  color:#000;
   font-family: 'Roboto', system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
 }
 
-/* Top bar */
+/* ========================
+   Top bar (overlays hero)
+======================== */
 .intro-nav{
+  position:absolute;             /* sits on top of the hero image */
+  top:0; left:0; right:0;
+  height:var(--nav-h);
   display:flex; justify-content:space-between; align-items:center;
-  padding: .8rem clamp(12px,4vw,48px);
-  border-bottom:1px solid #ffffff;
+  padding:.6rem var(--pad);
+  background:transparent;        /* hero photo shows through */
+  border-bottom:1px solid #fff;  /* white divider line */
+  z-index:5;
 }
-.intro-nav .brand { text-decoration:none; color:#000; font-weight:700; letter-spacing:.02em; }
-.intro-nav .back  { text-decoration:none; color:#000; opacity:.75; }
-.intro-nav .back:hover { opacity:1; }
+.intro-nav .brand,
+.intro-nav .back{
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+  letter-spacing:.02em;
+  text-shadow:0 1px 4px rgba(0,0,0,.35);  /* legibility on photo */
+}
+.intro-nav .back{ font-weight:400; opacity:.9; }
+.intro-nav .back:hover{ opacity:1; }
 
-/* HERO */
-.hero{
-  position:relative;
-  border-bottom:none;
-}
+/* ========================
+   Hero
+======================== */
+.hero{ position:relative; }
 .hero img{
-  width:100%; height: min(72vh, 720px);
-  object-fit: cover; object-position: center;
+  width:100%;
+  height:min(72vh,720px);
+  object-fit:cover;
+  object-position:center;
   display:block;
 }
-/* About card overlays the right side on desktop */
+
+/* Overlay “About” copy on right */
 .about-card{
-  position:absolute; right: clamp(16px,4vw,48px); top: clamp(16px,4vw,48px);
-  max-width: min(420px, 42ch);
-  background:#ffffff00;
+  position:absolute;
+  right:var(--pad);
+  top:var(--pad);
+  max-width:min(420px,42ch);
+  background:transparent;  /* keep it light; change to #ffffffee if you want a box */
   border:none;
-  padding: clamp(12px,2.2vw,18px) clamp(14px,2.6vw,20px);
-  box-shadow: 0 0 0 0 #000;  /* keep it flat */
+  padding:clamp(12px,2.2vw,18px) clamp(14px,2.6vw,20px);
 }
 .about-card h2{
-  font-size: clamp(1rem, 2.2vw, 1.1rem);
-  margin: 0 0 .65rem 0;
+  margin:0 0 .65rem 0;
+  font-size:clamp(1rem,2.2vw,1.1rem);
 }
 .about-card p{
-  margin: .35rem 0;
-  line-height: 1.6;
-  font-size: clamp(.95rem, 1.15vw, 1.0rem);
+  margin:.35rem 0;
+  line-height:1.6;
+  font-size:clamp(.95rem,1.15vw,1rem);
 }
 
-/* TWO-COLUMN SECTION */
+/* ========================
+   Two-column text + image
+======================== */
 .two-col{
   display:grid;
-  grid-template-columns: 1fr minmax(280px, 520px);
-  gap: clamp(24px, 5vw, 64px);
-  padding: clamp(20px,4vw,56px) clamp(16px,4vw,56px) clamp(28px,5vw,72px);
-  align-items: start;
+  grid-template-columns:1fr minmax(280px,520px);
+  gap:clamp(24px,5vw,64px);
+  padding:clamp(20px,4vw,56px) var(--pad) clamp(28px,5vw,72px);
+  align-items:start;
 }
 .two-col .text{
-  font-size: clamp(.98rem, 1.2vw, 1.05rem);
-  line-height: 1.7;
+  font-size:clamp(.98rem,1.2vw,1.05rem);
+  line-height:1.7;
 }
 .rubble{
-  margin:0; border:1px solid #000; border-radius:14px; overflow:hidden; background:#fff;
+  margin:0;
+  border:1px solid #000;
+  border-radius:14px;
+  overflow:hidden;
+  background:#fff;
 }
-.rubble img{
-  display:block; width:100%; height:auto;
-}
+.rubble img{ display:block; width:100%; height:auto; }
 
 /* Footer */
 .intro-footer{
   border-top:1px solid #000;
-  padding: .9rem clamp(16px,4vw,48px) 2rem;
-  text-align:center; opacity:.65; font-size:.9rem;
+  padding:.9rem var(--pad) 2rem;
+  text-align:center;
+  opacity:.65;
+  font-size:.9rem;
 }
 
-/* Responsive: stack columns, move card below image */
-@media (max-width: 960px){
-  .about-card{
-    position:static; margin: clamp(12px,4vw,20px) auto 0 auto; max-width: 92%;
-  }
-  .two-col{ grid-template-columns: 1fr; }
+/* Responsive */
+@media (max-width:960px){
+  .about-card{ position:static; margin:clamp(12px,4vw,20px) auto 0; max-width:92%; }
+  .two-col{ grid-template-columns:1fr; }
 }
 
-/* overlay the nav on the hero image and use a white divider */
-:root { --nav-h: 56px; }
-
-.hero { position: relative; }  /* anchor for the overlay */
-
-.intro-nav{
-  position: absolute;      /* sit on top of the hero */
-  top: 0; left: 0; right: 0;
-  height: var(--nav-h);
-  display:flex; justify-content:space-between; align-items:center;
-  padding: .6rem clamp(12px,4vw,48px);
-  background: transparent; /* photo shows through */
-  border-bottom: 1px solid #fff; /* white divider */
-  z-index: 5;
+/* ========================
+   Parallax section
+======================== */
+.parallax-wrap{
+  position:relative;
+  isolation:isolate;   /* keeps z-index of children self-contained */
 }
 
-/* make the text readable over the photo */
-.intro-nav .brand,
-.intro-nav .back{
-  color: #000000;
-  text-decoration: none;
-  text-shadow: 0 0px 0px rgba(0,0,0,.35); /* subtle contrast */
+.parallax-bg{
+  position:fixed;      /* stays still while scrolling */
+  inset:0;
+  background: var(--bg) center/cover no-repeat;
+  z-index:0;           /* behind panels, above page background */
 }
 
-/* keep existing responsive rules; no change needed */
+.panel{
+  position:relative;
+  z-index:1;
+  min-height:100vh;    /* each step fills the viewport */
+  display:grid;
+  place-items:center;
+  padding:6vh 0;
+}
+
+.stripe{
+  width:100%;
+  height:20vh;         /* requested bar height (20% of screen) */
+  border-top:1px solid #000;
+  border-bottom:1px solid #000;
+  display:grid; place-items:center;
+  transform:translateY(24px);
+  opacity:0;
+  transition: transform .6s cubic-bezier(.22,.61,.36,1), opacity .6s;
+}
+.stripe--white{ background:#fff; color:#000; }
+.stripe--red{ background:#ff2d2d; color:#fff; }
+
+.stripe-inner{
+  width:min(92vw,1080px);
+  padding:0 .75rem;
+  text-align:left;
+}
+.stripe-inner h3{ margin:0 0 .2rem 0; font-size:clamp(1.1rem,2.2vw,1.6rem); }
+.stripe-inner p { margin:0;          font-size:clamp(.95rem,1.2vw,1.05rem); line-height:1.6; }
+
+/* Reveal animation when panel enters the viewport (driven by IntersectionObserver) */
+.panel.in-view .stripe{
+  transform:translateY(0);
+  opacity:1;
+}

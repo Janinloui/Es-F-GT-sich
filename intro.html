@@ -41,29 +41,47 @@
       </aside>
     </section>
 
-    <!-- TWO COLUMNS -->
-    <section class="two-col">
-      <div class="col text">
-        <!-- Put your copy here -->
-        <p>
-          Hej … (your introduction text). Summarise the project aim, the four joint families,
-          the reuse workflow (survey → selection → joining), and how the system handles rubble edges,
-          saw-cut surfaces and dimensional drift.
-        </p>
-        <p>
-          Optional: links to the catalogue and to a methods note, or credits to collaborators.
-        </p>
+   <!-- PARALLAX SECTION -->
+<section class="parallax-wrap">
+  <!-- fixed background image -->
+  <div class="parallax-bg" style="--bg:url('assets/lift-slab-concrete.jpg')"></div>
+
+  <!-- Panel 1 -->
+  <section class="panel">
+    <div class="stripe stripe--white">
+      <div class="stripe-inner">
+        <h3>Why reuse concrete?</h3>
+        <p>Reusing structural elements saves carbon and keeps value in the loop.</p>
       </div>
+    </div>
+  </section>
 
-      <figure class="col rubble">
-        <!-- Use your rubble scan image (or a video if you prefer) -->
-        <img src="assets/rubble1.obj" alt="Rubble piece (scan)" />
-      </figure>
-    </section>
-  </main>
+  <!-- Panel 2 -->
+  <section class="panel">
+    <div class="stripe stripe--red">
+      <div class="stripe-inner">
+        <h3>What is “Es FÜGT sich”?</h3>
+        <p>Adaptable joints that let reclaimed slabs and walls meet again—precisely.</p>
+      </div>
+    </div>
+  </section>
 
-  <footer class="intro-footer">
-    <small>© Es FÜGT sich — Adaptable joints for structural concrete reuse</small>
-  </footer>
-</body>
-</html>
+  <!-- Panel 3 (duplicate/add as needed) -->
+  <section class="panel">
+    <div class="stripe stripe--white">
+      <div class="stripe-inner">
+        <h3>Catalogue</h3>
+        <p>Four joint families; dry, reversible, tolerant to demolition variance.</p>
+      </div>
+    </div>
+  </section>
+</section>
+
+<script>
+  // Fade-in each panel’s bar when it is ~50% visible
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.panel').forEach(p => obs.observe(p));
+</script>
