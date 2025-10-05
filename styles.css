@@ -4,10 +4,11 @@ html, body { height: 100%; margin: 0; }
 body {
   background: #fff;
   color: #000;
-  font-family: 'Special Elite', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-family: 'Roboto', system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
+
 }
 :root {
-  --join-duration: 2400ms;
+  --join-duration: 4000ms;
   --ease: cubic-bezier(.22,.61,.36,1);
 }
 
@@ -22,19 +23,22 @@ body {
   cursor: pointer;
 }
 
-.typewriter {
-  font-size: clamp(2rem, 6vw, 6rem);
+.title {
+  font-size: clamp(0.1rem, 2.0vw, 3.0rem);
   letter-spacing: .03em;
   white-space: nowrap;
   position: relative;
   z-index: 5;
   user-select: none;
-  animation: caret 900ms steps(1) infinite;
+  transform: translateY(15vh);
 }
 
-@keyframes caret {
-  0%, 49% { text-shadow: 0 0 #000; }
-  50%, 100% { text-shadow: 0 0 transparent; }
+.subtitle {
+  margin-top: .55rem;
+  font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: clamp(0.1rem, 1vw, 2rem);
+  opacity: .8;
+  transform: translateY(-29vh);
 }
 
 /* Hint button */
@@ -56,42 +60,165 @@ body {
 .hint:hover { opacity: 1; }
 .hint:focus { outline: 2px dashed #000; outline-offset: 4px; }
 
-/* Abstract “elements” */
-.element {
+
+/* =======================
+   JOIN STAGE — left-side layout (precise stop positions)
+   ======================= */
+
+:root{
+ 
+  --border: 0.1px;
+
+  --rubble-band: 20px; 
+
+  /* add textures */
+  --slab-tex: url("assets/slab-concrete.jpg");
+  --slab-tex-size: 320px; /* scale of the aggregate pattern */
+
+  /* separate thicknesses */
+  --wall-thickness: 50px;
+  --slab-thickness: 60px;     /* ← set whatever you want for the slab */
+
+  --wall-length: 90vmin;
+  --slab-length: 90vmin;
+
+  --stage-left: 10vw;
+  --join-y: 80vh;
+
+  --peek: 40px;
+
+  /* the vertical opening between the two walls;
+     usually equal to the slab thickness (+ optional clearance) */
+  --slot-clearance: 0px;  /* try 2px if you want a tiny visual gap */
+  --gap: calc(var(--slab-thickness) + var(--slot-clearance));
+
+  /* finals (no overhang) */
+  --wall-top-final: calc(var(--join-y) - var(--gap)/2 - var(--wall-length));
+  --wall-bottom-final: calc(var(--join-y) + var(--gap)/2);
+  --slab-final-left: var(--stage-left);
+}
+
+
+/* Generic element look */
+.element{
   position: absolute;
   background: #f2f2f2;
-  border: 2px solid #000;
-  box-shadow: 0 6px 0 0 #000;
-  will-change: transform;
-  z-index: 1;
+  border: var(--border) solid #000;
+  box-shadow: none;
+  z-index: 2;
 }
 
-/* shapes */
-.wall { width: min(48vmin, 520px); height: min(48vmin, 520px); }
-.slab { width: min(60vmin, 640px); height: min(8vmin, 90px); }
-
-/* start positions */
-.from-bottom { bottom: -60vmin; left: 50%; transform: translate(-50%, 0); }
-.from-top    { top: -60vmin;    left: 50%; transform: translate(-50%, 0); }
-.from-right  { top: 50%;        right: -70vmin; transform: translate(0,-50%); }
-
-/* animated in */
-.play .from-bottom { animation: rise var(--join-duration) var(--ease) forwards; }
-.play .from-top    { animation: drop var(--join-duration) var(--ease) forwards; }
-.play .from-right  { animation: slide var(--join-duration) var(--ease) forwards; }
-
-@keyframes rise {
-  to { bottom: 50%; transform: translate(-50%, 50%); }
-}
-@keyframes drop {
-  to { top: 50%; transform: translate(-50%, -50%); }
-}
-@keyframes slide {
-  to { right: 50%; transform: translate(50%, -50%); }
+/* “From the side” → thin bars */
+.wall{
+  width: var(--wall-thickness);
+  height: var(--wall-length);
+  left: var(--stage-left);
 }
 
-/* fade title away slightly as pieces join */
-.play .typewriter { transition: opacity var(--join-duration) var(--ease); opacity: .2; }
+/* allow drawing outside the box */
+.wall{ overflow: visible; z-index: 3; }
+
+/* rubble outline on OUTSIDE (left) */
+#wall-top::after,
+#wall-bottom::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left: calc(-1 * var(--rubble-band) - var(--border)); /* align to outer border */
+  width: var(--rubble-band);
+  height: 100%;
+  z-index: 4;
+  pointer-events: none;
+  opacity: .95;
+
+  /* keep as separate properties */
+  background-image: url("assets/rubble-outline.svg?v=4");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: left top;
+}
+
+.slab{
+  position: absolute;
+  width: var(--slab-length);
+  height: var(--slab-thickness);
+  top: calc(var(--join-y) - var(--slab-thickness)/2);
+
+  /* Texture + base tint */
+  background:
+    var(--slab-tex),                /* concrete photo */
+    linear-gradient(#ececec, #ececec); /* light cement tint */
+  background-size: var(--slab-tex-size), auto;
+  background-repeat: repeat, no-repeat;
+  background-blend-mode: multiply;  /* lets the photo darken the tint */
+  filter: brightness(1.03) contrast(1.05) saturate(0.7);
+
+  border: var(--border) solid #000;
+  left: var(--slab-final-left);
+  z-index: 2; /* or 1 if you want it behind the walls */
+}
+
+
+
+/* ---------- START POSITIONS (with a small peek) ---------- */
+
+/* Top wall peeks from the top edge */
+#wall-top{
+  top: calc(-1 * (var(--wall-length) - var(--peek)));
+}
+
+/* Bottom wall peeks from the bottom edge */
+#wall-bottom{
+  top: calc(100vh - var(--peek));
+}
+
+/* Slab peeks in from the right edge */
+#slab-right{
+  left: calc(100vw - var(--peek));
+}
+
+/* ---------- ANIMATIONS TO THE PRECISE FINAL POSITIONS ---------- */
+
+.play #wall-top{
+  animation: wallTopDown var(--join-duration) var(--ease) forwards;
+}
+.play #wall-bottom{
+  animation: wallBottomUp var(--join-duration) var(--ease) forwards;
+}
+.play #slab-right{
+  animation: slabLeft var(--join-duration) var(--ease) forwards;
+}
+
+/* Start invisible */
+.landing .title,
+.landing .subtitle {
+  opacity: 0;
+  transition: opacity var(--join-duration) var(--ease);
+}
+
+/* On click (when .play is added), fade to 100% over the join duration */
+.play .title,
+.play .subtitle {
+  opacity: 1;
+}
+
+
+@keyframes wallTopDown{
+  to { top: var(--wall-top-final); }
+}
+@keyframes wallBottomUp{
+  to { top: var(--wall-bottom-final); }
+}
+@keyframes slabLeft{
+  /* ends flush with the wall face */
+  to { left: var(--slab-final-left); }
+}
+
+
+/* Optional: fade the headline during motion */
+/*.play .title{ transition: opacity var(--join-duration) var(--ease); opacity: .25; }*/
+
+
 
 /* --- Catalogue --- */
 .header {
@@ -101,30 +228,8 @@ body {
   align-items: baseline;
   justify-content: space-between;
 }
-.header h1 { margin: 0; font-size: clamp(1.5rem, 4vw, 2.2rem); }
+.header h1 { margin: 0; font-size: clamp(1.5rem, 2vw, 0.8rem); }
 
-.grid {
-  padding: 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-}
-.card {
-  border: 2px solid #000;
-  padding: 1rem;
-  border-radius: 1rem;
-  background: #fff;
-  box-shadow: 0 8px 0 0 #000;
-}
-.card h3 { margin: .5rem 0 1rem; }
-.card p { margin: 0; opacity: .8; }
-.model {
-  width: 100%;
-  height: 320px;
-  background: #f6f6f6;
-  border: 1px dashed #000;
-  border-radius: .75rem;
-}
 .footer {
   padding: 1.25rem 2rem 3rem;
   display: flex;
@@ -132,3 +237,4 @@ body {
   opacity: .7;
   font-size: .9rem;
 }
+

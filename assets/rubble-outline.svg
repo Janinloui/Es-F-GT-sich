@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 100" preserveAspectRatio="none">
+  <!-- starts ON the right edge (x=12), ends ON the right edge (x=12) -->
+  <path
+    d="M12 0
+       C 10  6,  8 12, 11 18
+       C  9 24, 12 30,  8 36
+       C 11 42,  9 48, 12 54
+       C  9 60, 11 66,  8 72
+       C 12 78, 10 84, 11 90
+       L 12 100"
+    fill="none"
+    stroke="#000"
+    stroke-width="1.6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
